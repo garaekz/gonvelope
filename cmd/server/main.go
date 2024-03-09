@@ -9,14 +9,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/garaekz/go-rest-api/internal/album"
-	"github.com/garaekz/go-rest-api/internal/auth"
-	"github.com/garaekz/go-rest-api/internal/config"
-	"github.com/garaekz/go-rest-api/internal/errors"
-	"github.com/garaekz/go-rest-api/internal/healthcheck"
-	"github.com/garaekz/go-rest-api/pkg/accesslog"
-	"github.com/garaekz/go-rest-api/pkg/dbcontext"
-	"github.com/garaekz/go-rest-api/pkg/log"
+	"github.com/garaekz/gonvelope/internal/auth"
+	"github.com/garaekz/gonvelope/internal/config"
+	"github.com/garaekz/gonvelope/internal/errors"
+	"github.com/garaekz/gonvelope/internal/healthcheck"
+	"github.com/garaekz/gonvelope/pkg/accesslog"
+	"github.com/garaekz/gonvelope/pkg/dbcontext"
+	"github.com/garaekz/gonvelope/pkg/log"
 	routing "github.com/garaekz/ozzo-routing"
 	"github.com/garaekz/ozzo-routing/content"
 	"github.com/garaekz/ozzo-routing/cors"
@@ -86,12 +85,7 @@ func buildHandler(logger log.Logger, db *dbcontext.DB, cfg *config.Config) http.
 
 	rg := router.Group("/v1")
 
-	authJWTHandler := auth.JWTHandler(cfg.JWTSigningKey)
-
-	album.RegisterHandlers(rg.Group(""),
-		album.NewService(album.NewRepository(db, logger), logger),
-		authJWTHandler, logger,
-	)
+	// authJWTHandler := auth.JWTHandler(cfg.JWTSigningKey)
 
 	auth.RegisterHandlers(rg.Group(""),
 		auth.NewService(cfg.JWTSigningKey, cfg.JWTExpiration, logger),

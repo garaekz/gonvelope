@@ -1,4 +1,4 @@
-module github.com/garaekz/go-rest-api
+module github.com/garaekz/gonvelope
 
 go 1.22
 

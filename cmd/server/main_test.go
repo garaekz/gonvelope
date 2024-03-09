@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/garaekz/go-rest-api/pkg/log"
+	"github.com/garaekz/gonvelope/pkg/log"
 	"github.com/stretchr/testify/assert"
 )
 

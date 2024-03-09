@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/garaekz/go-rest-api/pkg/log"
+	"github.com/garaekz/gonvelope/pkg/log"
 	routing "github.com/garaekz/ozzo-routing"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/stretchr/testify/assert"

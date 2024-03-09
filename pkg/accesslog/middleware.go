@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/garaekz/go-rest-api/pkg/log"
+	"github.com/garaekz/gonvelope/pkg/log"
 	routing "github.com/garaekz/ozzo-routing"
 	"github.com/garaekz/ozzo-routing/access"
 )
