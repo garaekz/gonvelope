@@ -83,12 +83,12 @@ func buildHandler(logger log.Logger, db *dbcontext.DB, cfg *config.Config) http.
 
 	healthcheck.RegisterHandlers(router, Version)
 
-	rg := router.Group("/v1")
+	rg := router.Group("/api/v1")
 
 	// authJWTHandler := auth.JWTHandler(cfg.JWTSigningKey)
 
 	auth.RegisterHandlers(rg.Group(""),
-		auth.NewService(cfg.JWTSigningKey, cfg.JWTExpiration, logger),
+		auth.NewService(auth.NewRepository(db, logger), cfg.JWTSigningKey, cfg.JWTExpiration, logger),
 		logger,
 	)
 
