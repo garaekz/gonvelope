@@ -4,6 +4,7 @@ CREATE TABLE users
     name       VARCHAR NOT NULL,
     email      VARCHAR NOT NULL,
     password   VARCHAR NOT NULL,
+    active     BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -17,15 +18,15 @@ CREATE TABLE providers (
 );
 
 CREATE TABLE user_provider_accounts (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    provider_id INT NOT NULL,
+    id VARCHAR PRIMARY KEY,
+    user_id VARCHAR NOT NULL,
+    provider_id VARCHAR NOT NULL,
     access_token TEXT NOT NULL,
     refresh_token TEXT NOT NULL,
     token_expiry TIMESTAMP NOT NULL,
-    default BOOLEAN NOT NULL DEFAULT FALSE,
+    is_default BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (provider_id) REFERENCES providers(provider_id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (provider_id) REFERENCES providers(id)
 );
