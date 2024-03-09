@@ -64,22 +64,22 @@ version: ## display the version of the API server
 
 .PHONY: db-start
 db-start: ## start the database server
-	docker volume create postgres_go_restful
-	docker run --rm --name postgres_go_restful \
-		-v postgres_go_restful:/var/lib/postgresql/data \
+	docker volume create postgres_gonvelope
+	docker run --rm --name postgres_gonvelope \
+		-v postgres_gonvelope:/var/lib/postgresql/data \
 		-v $(shell pwd)/testdata:/testdata \
-		-e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=go_restful -d -p 5432:5432 postgres
+		-e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=gonvelope -d -p 5432:5432 postgres
 
 .PHONY: db-stop
 db-stop: ## stop the database server
-	docker stop postgres_go_restful
+	docker stop postgres_gonvelope
 
 .PHONY: testdata
 testdata: ## populate the database with test data
 	@echo $(MIGRATE)
 	make migrate-reset
 	@echo "Populating test data..."
-	@docker exec -it postgres_go_restful psql -U postgres -d go_restful -f /testdata/testdata.sql
+	@docker exec -it postgres_gonvelope psql -U postgres -d gonvelope -f /testdata/testdata.sql
 
 .PHONY: lint
 lint: ## run revive to lint all Go packages
