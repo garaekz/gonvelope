@@ -1,2 +1,7 @@
 dsn: "postgres://127.0.0.1/gonvelope?sslmode=disable&user=postgres&password=postgres"
 jwt_signing_key: "LxsKJywDL5O5PvgODZhBH12KE6k2yL8E"
+google_oauth:
+  client_id: "780366128506-oi68iiub77s0bd3c1u6rhk00020201ir.apps.googleusercontent.com"
+  client_secret: "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"
+  redirect_url: "http://localhost:8080/oauth2/google/callback"
+  scopes: ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/gmail.send"]

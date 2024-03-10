@@ -1,11 +1,12 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/garaekz/go-env"
 	"github.com/garaekz/gonvelope/pkg/log"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/qiangxue/go-env"
 	"gopkg.in/yaml.v2"
 )
 
@@ -32,6 +33,18 @@ type Config struct {
 	JWTSigningKey string `yaml:"jwt_signing_key" env:"JWT_SIGNING_KEY,secret"`
 	// JWT expiration in hours. Defaults to 72 hours (3 days)
 	JWTExpiration int `yaml:"jwt_expiration" env:"JWT_EXPIRATION"`
+	// Google OAuth configuration
+	GoogleOAuthConfig *OAuthConfig `yaml:"google_oauth" prefix:"GOOGLE_OAUTH_"`
+	// Outlook OAuth configuration
+	OutlookOAuthConfig *OAuthConfig `yaml:"outlook_oauth" prefix:"OUTLOOK_OAUTH_"`
+}
+
+// OAuthConfig represents an OAuth configuration for any OAuth-based authentication.
+type OAuthConfig struct {
+	ClientID     string   `yaml:"client_id" env:"CLIENT_ID,secret"`
+	ClientSecret string   `yaml:"client_secret" env:"CLIENT_SECRET,secret"`
+	RedirectURL  string   `yaml:"redirect_url" env:"REDIRECT_URL"`
+	Scopes       []string `yaml:"scopes" env:"SCOPES"`
 }
 
 // Validate validates the application configuration.
@@ -61,9 +74,10 @@ func Load(file string, logger log.Logger, fs FileSystem) (*Config, error) {
 
 	// load from environment variables prefixed with "APP_"
 	if err = env.New("APP_", logger.Infof).Load(&c); err != nil {
+		fmt.Printf("Error: %+v\n", err)
 		return nil, err
 	}
-
+	fmt.Printf("Config: %+v\n", c)
 	// validation
 	if err = c.Validate(); err != nil {
 		return nil, err

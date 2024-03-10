@@ -13,6 +13,7 @@ import (
 	"github.com/garaekz/gonvelope/internal/config"
 	"github.com/garaekz/gonvelope/internal/errors"
 	"github.com/garaekz/gonvelope/internal/healthcheck"
+	"github.com/garaekz/gonvelope/internal/oauth"
 	"github.com/garaekz/gonvelope/pkg/accesslog"
 	"github.com/garaekz/gonvelope/pkg/dbcontext"
 	"github.com/garaekz/gonvelope/pkg/log"
@@ -20,6 +21,7 @@ import (
 	"github.com/garaekz/ozzo-routing/content"
 	"github.com/garaekz/ozzo-routing/cors"
 	dbx "github.com/go-ozzo/ozzo-dbx"
+	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 )
 
@@ -83,13 +85,30 @@ func buildHandler(logger log.Logger, db *dbcontext.DB, cfg *config.Config) http.
 
 	healthcheck.RegisterHandlers(router, Version)
 
-	rg := router.Group("/api/v1")
-
-	// authJWTHandler := auth.JWTHandler(cfg.JWTSigningKey)
+	rg := router.Group("/api/v1/")
 
 	auth.RegisterHandlers(rg.Group(""),
 		auth.NewService(auth.NewRepository(db, logger), cfg.JWTSigningKey, cfg.JWTExpiration, logger),
 		logger,
+	)
+
+	authJWTHandler := auth.JWTHandler(cfg.JWTSigningKey)
+	var providerConfig = oauth.ProviderConfigs{
+		Google:  cfg.GoogleOAuthConfig,
+		Outlook: cfg.OutlookOAuthConfig,
+	}
+	store := sessions.NewCookieStore([]byte(cfg.JWTSigningKey))
+	oauth.RegisterHandlers(
+		router.Group("/oauth2/"),
+		oauth.NewService(
+			oauth.NewRepository(db, logger),
+			logger,
+			&providerConfig,
+			cfg.JWTSigningKey,
+		),
+		authJWTHandler,
+		logger,
+		store,
 	)
 
 	return router

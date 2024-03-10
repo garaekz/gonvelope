@@ -19,6 +19,7 @@ CREATE TABLE providers (
 
 CREATE TABLE user_provider_accounts (
     id VARCHAR PRIMARY KEY,
+    name VARCHAR NOT NULL,
     user_id VARCHAR NOT NULL,
     provider_id VARCHAR NOT NULL,
     access_token TEXT NOT NULL,
@@ -29,4 +30,18 @@ CREATE TABLE user_provider_accounts (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (provider_id) REFERENCES providers(id)
+);
+
+CREATE TABLE templates (
+    id VARCHAR PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    subject VARCHAR NOT NULL,
+    body TEXT NOT NULL,
+    to_email VARCHAR NOT NULL,
+    from_email VARCHAR NOT NULL,
+    from_name VARCHAR NOT NULL,
+    user_id VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
 );
